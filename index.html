@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TinySquares – An Infinite World of Micro Moments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="TinySquares – Explore an Infinite World of Micro Moments">
+  <meta name="description" content="TinySquares is a digital public gallery where anyone can submit images, videos, or NFTs. Explore an infinite mosaic of micro moments created by people from around the world.">
+  <meta name="keywords" content="TinySquares, submit NFT, public digital gallery, micro moments, creative submission, explore grid, video tiles, image art, global creators">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tinysquares.io">
+  <meta property="og:title" content="TinySquares – Explore an Infinite World of Micro Moments">
+  <meta property="og:description" content="Submit your art or NFT and explore an infinite digital mosaic of creative moments from around the world.">
+  <meta property="og:image" content="https://tinysquares.io/preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TinySquares – Explore an Infinite World of Micro Moments">
+  <meta name="twitter:description" content="Explore or submit your image, video, or NFT to TinySquares and join the world's largest public visual grid.">
+  <meta name="twitter:image" content="https://tinysquares.io/preview.jpg">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.jpeg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "TinySquares",
+    "url": "https://tinysquares.io",
+    "description": "TinySquares is a digital public gallery where anyone can submit images, videos, or NFTs to a global mosaic.",
+    "publisher": {
+      "@type": "Organization",
+       "name": "TinySquares",
+      "url": "https://tinysquares.io"
+    }
+  }  
+  </script>
+  <style>
+    #topbar.hide, footer.hide { display: none !important; }
+  </style>
+</head>
+<body oncontextmenu="return false">
+
+
+  <div id="loader">Loading...</div>
+  <div id="viewport">
+    <main id="gallery"></main>
+</div>
+
+  <footer>
+    <p>
+      Want your photo or video on TinySquares? <a href="submit.html">Claim a Tile</a>.
+    </p>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    let hideTimeout;
+    function showBars() {
+      clearTimeout(hideTimeout);
+      document.getElementById('topbar').classList.remove('hide');
+      document.querySelector('footer').classList.remove('hide');
+      hideTimeout = setTimeout(() => {
+        document.getElementById('topbar').classList.add('hide');
+        document.querySelector('footer').classList.add('hide');
+      }, 2000);
+    }
+    window.addEventListener('mousemove', showBars);
+    window.addEventListener('scroll', showBars);
+    window.addEventListener('touchmove', showBars);
+    showBars();
+  </script>
+  <script>
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const shown = localStorage.getItem('a2hsPromptShown');
+
+    if (isMobile && !shown) {
+      const prompt = document.createElement('div');
+      prompt.innerHTML = "📲 Add TinySquares to your home screen for faster access.<br><small>Tap the share icon and choose 'Add to Home Screen'</small>";
+      prompt.style.position = "fixed";
+      prompt.style.bottom = "1rem";
+      prompt.style.left = "50%";
+      prompt.style.transform = "translateX(-50%)";
+      prompt.style.background = "#000";
+      prompt.style.color = "#fff";
+      prompt.style.padding = "1rem";
+      prompt.style.borderRadius = "1rem";
+      prompt.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+      prompt.style.zIndex = "9999";
+      prompt.style.textAlign = "center";
+      prompt.style.maxWidth = "90%";
+
+      document.body.appendChild(prompt);
+      localStorage.setItem('a2hsPromptShown', 'true');
+
+      setTimeout(() => {
+        prompt.remove();
+      }, 10000);
+    }
+    if (window.innerWidth < 768) {
+      let lastScrollY = window.scrollY;
+      let ticking = false;
+
+      function handleScroll() {
+        const currentScrollY = window.scrollY;
+        const goingDown = currentScrollY > lastScrollY;
+        lastScrollY = currentScrollY;
+
+        document.getElementById('topbar').classList.toggle('hide', goingDown);
+        document.querySelector('footer').classList.toggle('hide', goingDown);
+        ticking = false;
+     }
+
+     window.addEventListener('scroll', () => {
+       if (!ticking) {
+         window.requestAnimationFrame(handleScroll);
+         ticking = true;
+       }
+     });
+   } 
+ </script>
+</body>
+</html>
