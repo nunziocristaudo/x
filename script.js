@@ -1,3 +1,5 @@
+// tinysquares-init.js
+
 const gallery = document.getElementById('gallery');
 const tileSize = 150;
 const bufferTiles = 2;
@@ -172,24 +174,25 @@ function animate() {
   renderInfiniteGrid();
 }
 
-gallery.addEventListener('mousedown', (e) => {
+gallery.addEventListener('pointerdown', (e) => {
+  if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
   isDragging = true;
   dragStartX = e.clientX - cameraX;
   dragStartY = e.clientY - cameraY;
 });
 
-gallery.addEventListener('mousemove', (e) => {
-  if (isDragging) {
+gallery.addEventListener('pointermove', (e) => {
+  if (isDragging && e.pointerType !== 'touch' && e.pointerType !== 'pen') {
     cameraX = e.clientX - dragStartX;
     cameraY = e.clientY - dragStartY;
   }
 });
 
-gallery.addEventListener('mouseup', () => {
+gallery.addEventListener('pointerup', () => {
   isDragging = false;
 });
 
-gallery.addEventListener('mouseleave', () => {
+gallery.addEventListener('pointerleave', () => {
   isDragging = false;
 });
 
@@ -198,14 +201,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   createLightbox();
   animate();
 
-  let lastTouchX = 0;
-  let lastTouchY = 0;
+  let lastTouchX = 0, lastTouchY = 0;
+  let initialDistance = null;
+  let scale = 1;
+  let zoom = 1;
 
   gallery.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
       isDragging = true;
       lastTouchX = e.touches[0].clientX;
       lastTouchY = e.touches[0].clientY;
+    } else if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      initialDistance = Math.sqrt(dx * dx + dy * dy);
     }
   });
 
@@ -215,21 +224,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       const touchY = e.touches[0].clientY;
       const deltaX = touchX - lastTouchX;
       const deltaY = touchY - lastTouchY;
+      velocityX = -deltaX * 0.5;
+      velocityY = -deltaY * 0.5;
       cameraX -= deltaX;
       cameraY -= deltaY;
       lastTouchX = touchX;
       lastTouchY = touchY;
+    } else if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (initialDistance) {
+        zoom = distance / initialDistance;
+        scale = Math.max(0.5, Math.min(zoom, 2));
+        gallery.style.transform = `translate(${-cameraX}px, ${-cameraY}px) scale(${scale})`;
+      }
     }
   });
 
   gallery.addEventListener('touchend', () => {
     isDragging = false;
+    initialDistance = null;
   });
 
   gallery.addEventListener('wheel', (e) => {
     e.preventDefault();
-    cameraX += e.deltaX;
-    cameraY += e.deltaY;
+    velocityX += e.deltaX * 0.1;
+    velocityY += e.deltaY * 0.1;
   }, { passive: false });
 });
   createLightbox();
