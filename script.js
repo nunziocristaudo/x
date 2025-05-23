@@ -147,19 +147,36 @@ function showLightbox(index) {
   const lb = document.getElementById('lightbox');
   const media = availableFiles[index];
   currentIndex = index;
+
   const ext = media.url.split('.').pop();
   const el = document.createElement(ext === 'mp4' ? 'video' : 'img');
   el.src = baseURL + media.url;
+
   if (ext === 'mp4') {
     el.controls = true;
     el.autoplay = true;
     el.loop = true;
     el.muted = true;
+  } else {
+    el.alt = 'Expanded media';
+    el.style.maxWidth = '90vw';
+    el.style.maxHeight = '90vh';
+    el.style.borderRadius = '10px';
+    el.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+    el.style.transition = 'transform 0.3s ease';
   }
+
   const container = document.getElementById('mediaContainer');
   container.innerHTML = '';
   container.appendChild(el);
+
   lb.classList.remove('hidden');
+  lb.style.display = 'flex';
+  lb.style.alignItems = 'center';
+  lb.style.justifyContent = 'center';
+  lb.style.background = 'rgba(0,0,0,0.85)';
+  lb.style.transition = 'opacity 0.3s ease';
+  lb.style.opacity = '1';
 }
 
 function animate() {
