@@ -1,5 +1,3 @@
-// tinysquares-init.js
-
 const gallery = document.getElementById('gallery');
 const tileSize = 150;
 const bufferTiles = 2;
@@ -253,6 +251,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     velocityY += e.deltaY * 0.1;
   }, { passive: false });
 });
-  createLightbox();
-  animate();
 });
