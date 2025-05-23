@@ -1,5 +1,3 @@
-// tinysquares-init.js
-
 const gallery = document.getElementById('gallery');
 const tileSize = 150;
 const bufferTiles = 2;
@@ -81,13 +79,18 @@ function createLightbox() {
   lb.classList.add('hidden');
   lb.innerHTML = `
     <div class="lightbox-content">
-      <button id="closeBtn">×</button>
-      <div id="mediaContainer"></div>
+            <div id="mediaContainer"></div>
     </div>
   `;
   document.body.appendChild(lb);
 
-  document.getElementById('closeBtn').onclick = () => lb.classList.add('hidden');
+  lb.onclick = () => {
+    lb.classList.add('fade-out');
+    setTimeout(() => {
+      lb.classList.remove('fade-out');
+      lb.classList.add('hidden');
+    }, 300);
+  };
   lb.addEventListener('touchstart', handleTouchStart, false);
   lb.addEventListener('touchmove', handleTouchMove, false);
   document.addEventListener('keydown', handleArrowKey);
