@@ -18,6 +18,7 @@ let velocityY = 0;
 let lastMove = 0;
 
 async function loadAvailableFiles() {
+  const workerURL = 'https://quiet-mouse-8001.flaxen-huskier-06.workers.dev/';
   const localTilesURL = 'tiles.json';
 
   try {
