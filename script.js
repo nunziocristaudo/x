@@ -1,42 +1,77 @@
+// tinysquares-init.js
+
 const gallery = document.getElementById('gallery');
 const tileSize = 150;
-const bufferTiles = 1;
-let tiles = new Map();
-
+const bufferTiles = 2;
 const baseURL = 'https://dev.tinysquares.io/';
 const workerURL = 'https://quiet-mouse-8001.flaxen-huskier-06.workers.dev/';
 
+let tiles = new Map();
+let availableFiles = [];
 let cameraX = 0;
 let cameraY = 0;
-
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
 let velocityX = 0;
 let velocityY = 0;
-
 let lastMove = 0;
+let currentIndex = 0;
 
-async function loadAvailableFiles() {
-  const workerURL = 'https://quiet-mouse-8001.flaxen-huskier-06.workers.dev/';
-  const localTilesURL = 'tiles.json';
-
+async function fetchTileList() {
   try {
-    const [remoteRes, localRes] = await Promise.all([
-      fetch(workerURL).then(res => res.json()).catch(() => []),
-      fetch(localTilesURL).then(res => res.json()).catch(() => [])
-    ]);
+    const res = await fetch(workerURL);
+    const list = await res.json();
+    availableFiles = list.map(item => (typeof item === 'string' ? { url: item } : item));
+  } catch (e) {
+    console.error('Failed to load tiles:', e);
+    availableFiles = [];
+  }
+}
 
-    const normalize = (item) =>
-      typeof item === 'string' ? { url: item } : item;
+function createTile(file, index, x, y) {
+  const tile = document.createElement('div');
+  tile.className = 'post';
+  tile.dataset.index = index;
+  tile.style.position = 'absolute';
+  tile.style.left = `${x * tileSize}px`;
+  tile.style.top = `${y * tileSize}px`;
 
-    const remoteFiles = remoteRes.map(normalize);
-    const localFiles = localRes.map(normalize);
+  const frame = document.createElement('div');
+  frame.className = 'frame';
 
-    window.availableFiles = [...remoteFiles, ...localFiles];
-  } catch (err) {
-    console.error('Failed to load files', err);
-    window.availableFiles = [];
+  const ext = file.url.split('.').pop();
+  const media = document.createElement(ext === 'mp4' ? 'video' : 'img');
+  media.src = baseURL + file.url;
+  if (ext === 'mp4') {
+    media.muted = true;
+    media.loop = true;
+    media.autoplay = true;
+  }
+
+  frame.appendChild(media);
+  tile.appendChild(frame);
+  tile.addEventListener('click', () => showLightbox(index));
+
+  gallery.appendChild(tile);
+  tiles.set(`${x},${y}`, tile);
+}
+
+function renderInfiniteGrid() {
+  const cols = Math.ceil(window.innerWidth / tileSize) + bufferTiles * 2;
+  const rows = Math.ceil(window.innerHeight / tileSize) + bufferTiles * 2;
+
+  const startX = Math.floor(cameraX / tileSize) - bufferTiles;
+  const startY = Math.floor(cameraY / tileSize) - bufferTiles;
+
+  for (let y = startY; y < startY + rows; y++) {
+    for (let x = startX; x < startX + cols; x++) {
+      const key = `${x},${y}`;
+      if (!tiles.has(key)) {
+        const index = ((y * 1000 + x) % availableFiles.length + availableFiles.length) % availableFiles.length;
+        createTile(availableFiles[index], index, x, y);
+      }
+    }
   }
 }
 
@@ -53,13 +88,11 @@ function createLightbox() {
   document.body.appendChild(lb);
 
   document.getElementById('closeBtn').onclick = () => lb.classList.add('hidden');
-
   lb.addEventListener('touchstart', handleTouchStart, false);
   lb.addEventListener('touchmove', handleTouchMove, false);
   document.addEventListener('keydown', handleArrowKey);
 }
 
-let currentIndex = 0;
 let xDown = null;
 let yDown = null;
 
@@ -71,19 +104,15 @@ function handleTouchStart(evt) {
 
 function handleTouchMove(evt) {
   if (!xDown || !yDown) return;
-
   const xUp = evt.touches[0].clientX;
   const yUp = evt.touches[0].clientY;
-
   const xDiff = xDown - xUp;
   const yDiff = yDown - yUp;
-
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     if (xDiff > 0) showNeighbor('right'); else showNeighbor('left');
   } else {
     if (yDiff > 0) showNeighbor('down'); else showNeighbor('up');
   }
-
   xDown = null;
   yDown = null;
 }
@@ -95,9 +124,7 @@ function handleArrowKey(e) {
     ArrowUp: 'up',
     ArrowDown: 'down'
   };
-  if (keyMap[e.key]) {
-    showNeighbor(keyMap[e.key]);
-  }
+  if (keyMap[e.key]) showNeighbor(keyMap[e.key]);
 }
 
 function showNeighbor(direction) {
@@ -107,8 +134,7 @@ function showNeighbor(direction) {
   else if (direction === 'right') nextIndex++;
   else if (direction === 'up') nextIndex -= cols;
   else if (direction === 'down') nextIndex += cols;
-
-  if (nextIndex >= 0 && nextIndex < window.availableFiles.length) {
+  if (nextIndex >= 0 && nextIndex < availableFiles.length) {
     currentIndex = nextIndex;
     showLightbox(currentIndex);
   }
@@ -116,7 +142,7 @@ function showNeighbor(direction) {
 
 function showLightbox(index) {
   const lb = document.getElementById('lightbox');
-  const media = window.availableFiles[index];
+  const media = availableFiles[index];
   currentIndex = index;
   const ext = media.url.split('.').pop();
   const el = document.createElement(ext === 'mp4' ? 'video' : 'img');
@@ -133,19 +159,39 @@ function showLightbox(index) {
   lb.classList.remove('hidden');
 }
 
-function initTileClickHandlers() {
-  gallery.addEventListener('click', (e) => {
-    const post = e.target.closest('.post');
-    if (!post) return;
-    const index = parseInt(post.dataset.index, 10);
-    if (!isNaN(index)) {
-      showLightbox(index);
-    }
-  });
+function animate() {
+  requestAnimationFrame(animate);
+  cameraX += velocityX;
+  cameraY += velocityY;
+  velocityX *= 0.95;
+  velocityY *= 0.95;
+  gallery.style.transform = `translate(${-cameraX}px, ${-cameraY}px)`;
+  renderInfiniteGrid();
 }
 
-loadAvailableFiles().then(() => {
+gallery.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  dragStartX = e.clientX - cameraX;
+  dragStartY = e.clientY - cameraY;
+});
+
+gallery.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    cameraX = e.clientX - dragStartX;
+    cameraY = e.clientY - dragStartY;
+  }
+});
+
+gallery.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+gallery.addEventListener('mouseleave', () => {
+  isDragging = false;
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await fetchTileList();
   createLightbox();
-  initTileClickHandlers();
-  // continue initializing grid...
+  animate();
 });
