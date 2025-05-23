@@ -197,4 +197,41 @@ document.addEventListener('DOMContentLoaded', async () => {
   await fetchTileList();
   createLightbox();
   animate();
+
+  let lastTouchX = 0;
+  let lastTouchY = 0;
+
+  gallery.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastTouchX = e.touches[0].clientX;
+      lastTouchY = e.touches[0].clientY;
+    }
+  });
+
+  gallery.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const deltaX = touchX - lastTouchX;
+      const deltaY = touchY - lastTouchY;
+      cameraX -= deltaX;
+      cameraY -= deltaY;
+      lastTouchX = touchX;
+      lastTouchY = touchY;
+    }
+  });
+
+  gallery.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  gallery.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    cameraX += e.deltaX;
+    cameraY += e.deltaY;
+  }, { passive: false });
+});
+  createLightbox();
+  animate();
 });
