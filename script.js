@@ -268,4 +268,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     velocityY += e.deltaY * 0.1;
   }, { passive: false });
 });
-});
