@@ -78,7 +78,7 @@ function createLightbox() {
   lb.id = 'lightbox';
   lb.classList.add('hidden');
   lb.innerHTML = `
-    <div class="lightbox-content">
+    <div class="lightbox-content" id="lightboxContent">
       <div id="mediaContainer"></div>
       <div class="nav-arrow nav-left" onclick="event.stopPropagation(); showNeighbor('left')">&#x25C0;</div>
       <div class="nav-arrow nav-right" onclick="event.stopPropagation(); showNeighbor('right')">&#x25B6;</div>
@@ -88,12 +88,14 @@ function createLightbox() {
   `;
   document.body.appendChild(lb);
 
-  lb.onclick = () => {
-    lb.classList.add('fade-out');
-    setTimeout(() => {
-      lb.classList.remove('fade-out');
-      lb.classList.add('hidden');
-    }, 300);
+  lb.onclick = (e) => {
+    if (e.target.id === 'lightbox') {
+      lb.classList.add('fade-out');
+      setTimeout(() => {
+        lb.classList.remove('fade-out');
+        lb.classList.add('hidden');
+      }, 300);
+    }
   };
   lb.addEventListener('touchstart', handleTouchStart, false);
   lb.addEventListener('touchmove', handleTouchMove, false);
