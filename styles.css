@@ -209,4 +209,12 @@ a:hover {
   color: white;
   cursor: pointer;
   z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* Prevent interaction when hidden */
+}
+
+#lightbox:hover .lightbox-close {
+  opacity: 1;
+  pointer-events: auto; /* Enable interaction when visible */
 }
