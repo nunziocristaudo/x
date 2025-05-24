@@ -195,6 +195,20 @@ function showLightbox(index) {
 
   const container = document.getElementById('mediaContainer');
   container.innerHTML = '';
+  const closeBtn = document.getElementById('lightboxClose');
+  if (closeBtn) {
+    closeBtn.onclick = (event) => {
+      event.stopPropagation();
+      document.body.style.overflow = '';
+      const lb = document.getElementById('lightbox');
+      lb.classList.add('fade-out');
+      setTimeout(() => {
+        lb.classList.remove('fade-out');
+        lb.classList.add('hidden');
+      }, 300);
+    };
+  }
+
   container.appendChild(el);
 
   lb.classList.remove('hidden');
