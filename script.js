@@ -120,6 +120,7 @@ function createLightbox() {
       handleArrowKey(e);
     }
   });
+});
 }
 
 let xDown = null;
