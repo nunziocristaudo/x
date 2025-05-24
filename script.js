@@ -78,6 +78,7 @@ function createLightbox() {
   lb.id = 'lightbox';
   lb.classList.add('hidden');
   lb.innerHTML = `
+    <div class="lightbox-close" onclick="event.stopPropagation(); document.body.style.overflow = ''; lb.classList.add('fade-out'); setTimeout(() => { lb.classList.remove('fade-out'); lb.classList.add('hidden'); }, 300);">&times;</div>
     <div class="lightbox-content" id="lightboxContent">
       <div id="mediaContainer"></div>
       <div class="nav-arrow nav-left" style="top: 50%; left: 5px; font-size: 2rem; transform: translateY(-50%);" onclick="event.stopPropagation(); showNeighbor('left')">&#x25C0;</div>
