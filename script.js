@@ -210,6 +210,21 @@ function showLightbox(index) {
   }
 
   container.appendChild(el);
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'lightbox-close';
+  closeBtn.id = 'lightboxClose';
+  closeBtn.innerHTML = '&times;';
+  container.appendChild(closeBtn);
+
+  closeBtn.onclick = (event) => {
+    event.stopPropagation();
+    document.body.style.overflow = '';
+    lb.classList.add('fade-out');
+    setTimeout(() => {
+      lb.classList.remove('fade-out');
+      lb.classList.add('hidden');
+      }, 300);
+  };
 
   lb.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
