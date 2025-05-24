@@ -90,6 +90,7 @@ function createLightbox() {
 
   lb.onclick = (e) => {
     if (e.target.id === 'lightbox') {
+      document.body.style.overflow = '';
       lb.classList.add('fade-out');
       setTimeout(() => {
         lb.classList.remove('fade-out');
@@ -177,10 +178,11 @@ function showLightbox(index) {
   container.appendChild(el);
 
   lb.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
   lb.style.display = 'flex';
   lb.style.alignItems = 'center';
   lb.style.justifyContent = 'center';
-  lb.style.background = 'rgba(0,0,0,0.85)';
+  lb.style.background = 'rgba(0,0,0,0.95)';
   lb.style.transition = 'opacity 0.3s ease';
   lb.style.opacity = '1';
 }
