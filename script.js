@@ -89,14 +89,20 @@ function createLightbox() {
   `;
   document.body.appendChild(lb);
 
-  document.getElementById('lightboxClose').addEventListener('click', () => {
-    document.body.style.overflow = '';
-    lb.classList.add('fade-out');
-    setTimeout(() => {
-      lb.classList.remove('fade-out');
-      lb.classList.add('hidden');
-    }, 300);
-  });
+  setTimeout(() => {
+    const closeBtn = document.getElementById('lightboxClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        const lb = document.getElementById('lightbox');
+        document.body.style.overflow = '';
+        lb.classList.add('fade-out');
+        setTimeout(() => {
+          lb.classList.remove('fade-out');
+          lb.classList.add('hidden');
+        }, 300);
+      });
+    }
+  }, 0);
 
   lb.onclick = (e) => {
     if (e.target === document.getElementById('lightbox')) {
