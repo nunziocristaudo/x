@@ -79,7 +79,11 @@ function createLightbox() {
   lb.classList.add('hidden');
   lb.innerHTML = `
     <div class="lightbox-content">
-            <div id="mediaContainer"></div>
+      <div id="mediaContainer"></div>
+      <div class="nav-arrow nav-left" onclick="event.stopPropagation(); showNeighbor('left')">&#x25C0;</div>
+      <div class="nav-arrow nav-right" onclick="event.stopPropagation(); showNeighbor('right')">&#x25B6;</div>
+      <div class="nav-arrow nav-up" onclick="event.stopPropagation(); showNeighbor('up')">&#x25B2;</div>
+      <div class="nav-arrow nav-down" onclick="event.stopPropagation(); showNeighbor('down')">&#x25BC;</div>
     </div>
   `;
   document.body.appendChild(lb);
