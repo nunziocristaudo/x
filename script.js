@@ -81,10 +81,10 @@ function createLightbox() {
     <div class="lightbox-close" id="lightboxClose">&times;</div>
     <div class="lightbox-content" id="lightboxContent">
       <div id="mediaContainer"></div>
-      <div class="nav-arrow nav-left" style="top: 50%; left: 5px; font-size: 2rem; transform: translateY(-50%);" onclick="event.stopPropagation(); showNeighbor('left')">&#x25C0;</div>
-      <div class="nav-arrow nav-right" style="top: 50%; right: 5px; font-size: 2rem; transform: translateY(-50%);" onclick="event.stopPropagation(); showNeighbor('right')">&#x25B6;</div>
-      <div class="nav-arrow nav-up" style="left: 50%; top: 5px; font-size: 2rem; transform: translateX(-50%);" onclick="event.stopPropagation(); showNeighbor('up')">&#x25B2;</div>
-      <div class="nav-arrow nav-down" style="left: 50%; bottom: 5px; font-size: 2rem; transform: translateX(-50%);" onclick="event.stopPropagation(); showNeighbor('down')">&#x25BC;</div>
+      <div class="nav-button nav-left" onclick="event.stopPropagation(); showNeighbor('left')">&#x25C0;</div>
+      <div class="nav-button nav-right" onclick="event.stopPropagation(); showNeighbor('right')">&#x25B6;</div>
+      <div class="nav-button nav-up" onclick="event.stopPropagation(); showNeighbor('up')">&#x25B2;</div>
+      <div class="nav-button nav-down" onclick="event.stopPropagation(); showNeighbor('down')">&#x25BC;</div>
     </div>
   `;
   document.body.appendChild(lb);
