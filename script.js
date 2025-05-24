@@ -91,29 +91,20 @@ function createLightbox() {
 
   setTimeout(() => {
     const closeBtn = document.getElementById('lightboxClose');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        const lb = document.getElementById('lightbox');
-        document.body.style.overflow = '';
-        lb.classList.add('fade-out');
-        setTimeout(() => {
-          lb.classList.remove('fade-out');
-          lb.classList.add('hidden');
-        }, 300);
-      });
-    }
-  }, 0);
+  if (closeBtn) {
+    closeBtn.removeEventListener('click', closeLightbox); // ensure no duplicate listeners
+    closeBtn.addEventListener('click', closeLightbox);
+  }
 
-  lb.onclick = (e) => {
-    if (e.target === document.getElementById('lightbox')) {
-      document.body.style.overflow = '';
-      lb.classList.add('fade-out');
-      setTimeout(() => {
-        lb.classList.remove('fade-out');
-        lb.classList.add('hidden');
-      }, 300);
-    }
-  };
+  function closeLightbox(event) {
+    event.stopPropagation();
+    document.body.style.overflow = '';
+    lb.classList.add('fade-out');
+    setTimeout(() => {
+      lb.classList.remove('fade-out');
+      lb.classList.add('hidden');
+    }, 300);
+  }
   lb.addEventListener('touchstart', handleTouchStart, false);
   lb.addEventListener('touchmove', handleTouchMove, false);
   document.addEventListener('keydown', (e) => {
@@ -213,6 +204,19 @@ function showLightbox(index) {
   lb.style.background = 'rgba(0,0,0,0.95)';
   lb.style.transition = 'opacity 0.3s ease';
   lb.style.opacity = '1';
+
+  const closeBtn = document.getElementById('lightboxClose');
+  if (closeBtn) {
+    closeBtn.onclick = (event) => {
+      event.stopPropagation();
+      document.body.style.overflow = '';
+      lb.classList.add('fade-out');
+      setTimeout(() => {
+        lb.classList.remove('fade-out');
+        lb.classList.add('hidden');
+      }, 300);
+    };
+  }
 }
 
 function animate() {
