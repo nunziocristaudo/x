@@ -254,3 +254,18 @@ body.scrollable {
   transition: opacity 0.3s ease;
 }
 
+.nav-arrow {
+  position: absolute;
+  font-size: 2rem;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+  
+}
+.nav-left { top: 50%; left: 10px; transform: translateY(-50%); }
+.nav-right { top: 50%; right: 10px; transform: translateY(-50%); }
+.nav-up { top: 10px; left: 50%; transform: translateX(-50%); }
+.nav-down { bottom: 10px; left: 50%; transform: translateX(-50%); }
+
+
