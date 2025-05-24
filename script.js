@@ -89,7 +89,7 @@ function createLightbox() {
   document.body.appendChild(lb);
 
   lb.onclick = (e) => {
-    if (!document.getElementById('mediaContainer').contains(e.target)) {
+    if (e.target === document.getElementById('lightbox')) {
       document.body.style.overflow = '';
       lb.classList.add('fade-out');
       setTimeout(() => {
@@ -100,7 +100,19 @@ function createLightbox() {
   };
   lb.addEventListener('touchstart', handleTouchStart, false);
   lb.addEventListener('touchmove', handleTouchMove, false);
-  document.addEventListener('keydown', handleArrowKey);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const lb = document.getElementById('lightbox');
+      document.body.style.overflow = '';
+      lb.classList.add('fade-out');
+      setTimeout(() => {
+        lb.classList.remove('fade-out');
+        lb.classList.add('hidden');
+      }, 300);
+    } else {
+      handleArrowKey(e);
+    }
+  });
 }
 
 let xDown = null;
