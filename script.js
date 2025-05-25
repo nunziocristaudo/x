@@ -196,6 +196,7 @@ function showLightbox(index) {
   const container = document.getElementById('mediaContainer');
   container.innerHTML = '';
   container.appendChild(el);
+
   const closeBtn = document.createElement('div');
   closeBtn.className = 'lightbox-close';
   closeBtn.id = 'lightboxClose';
@@ -209,17 +210,32 @@ function showLightbox(index) {
     setTimeout(() => {
       lb.classList.remove('fade-out');
       lb.classList.add('hidden');
-      }, 300);
+    }, 300);
   };
 
   lb.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-  lb.style.display = 'flex';
-  lb.style.alignItems = 'center';
-  lb.style.justifyContent = 'center';
-  lb.style.background = 'rgba(0,0,0,0.95)';
-  lb.style.transition = 'opacity 0.3s ease';
-  lb.style.opacity = '1';
+}
+
+function showBars() {
+  clearTimeout(hideTimeout);
+  const topbar = document.getElementById('topbar');
+  const footer = document.querySelector('footer');
+  if (topbar && footer) {
+    topbar.classList.remove('hide');
+    footer.classList.remove('hide');
+    hideTimeout = setTimeout(() => {
+      topbar.classList.add('hide');
+      footer.classList.add('hide');
+    }, 2000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await fetchTileList();
+  createLightbox();
+  animate();
+});
 
   const closeBtn = document.getElementById('lightboxClose');
   if (closeBtn) {
