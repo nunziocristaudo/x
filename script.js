@@ -25,7 +25,6 @@ async function fetchTileList() {
     console.error('Failed to load tiles:', e);
     availableFiles = [];
   }
-}
 
 function createTile(file, index, x, y) {
   const tile = document.createElement('div');
@@ -53,7 +52,6 @@ function createTile(file, index, x, y) {
 
   gallery.appendChild(tile);
   tiles.set(`${x},${y}`, tile);
-}
 
 function renderInfiniteGrid() {
   const cols = Math.ceil(window.innerWidth / tileSize) + bufferTiles * 2;
@@ -70,8 +68,6 @@ function renderInfiniteGrid() {
         createTile(availableFiles[index], index, x, y);
       }
     }
-  }
-}
 
 function createLightbox() {
   const lb = document.createElement('div');
@@ -121,7 +117,6 @@ function createLightbox() {
     }
   });
 });
-}
 
 let xDown = null;
 let yDown = null;
@@ -130,7 +125,6 @@ function handleTouchStart(evt) {
   const firstTouch = evt.touches[0];
   xDown = firstTouch.clientX;
   yDown = firstTouch.clientY;
-}
 
 function handleTouchMove(evt) {
   if (!xDown || !yDown) return;
@@ -145,7 +139,6 @@ function handleTouchMove(evt) {
   }
   xDown = null;
   yDown = null;
-}
 
 function handleArrowKey(e) {
   const keyMap = {
@@ -155,7 +148,6 @@ function handleArrowKey(e) {
     ArrowDown: 'down'
   };
   if (keyMap[e.key]) showNeighbor(keyMap[e.key]);
-}
 
 function showNeighbor(direction) {
   const cols = Math.floor(window.innerWidth / tileSize);
@@ -168,7 +160,6 @@ function showNeighbor(direction) {
     currentIndex = nextIndex;
     showLightbox(currentIndex);
   }
-}
 
 function showLightbox(index) {
   const lb = document.getElementById('lightbox');
@@ -215,7 +206,6 @@ function showLightbox(index) {
 
   lb.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-}
 
 document.addEventListener('DOMContentLoaded', async () => {
   await fetchTileList();
@@ -235,7 +225,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }, 300);
     };
   }
-}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -245,7 +234,6 @@ function animate() {
   velocityY *= 0.95;
   gallery.style.transform = `translate(${-cameraX}px, ${-cameraY}px)`;
   renderInfiniteGrid();
-}
 
 gallery.addEventListener('pointerdown', (e) => {
   if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
@@ -309,7 +297,6 @@ gallery.addEventListener('pointerleave', () => {
         scale = Math.max(0.5, Math.min(zoom, 2));
         gallery.style.transform = `translate(${-cameraX}px, ${-cameraY}px) scale(${scale})`;
       }
-    }
   });
 
   gallery.addEventListener('touchend', () => {
