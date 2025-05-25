@@ -217,20 +217,6 @@ function showLightbox(index) {
   document.body.style.overflow = 'hidden';
 }
 
-function showBars() {
-  clearTimeout(hideTimeout);
-  const topbar = document.getElementById('topbar');
-  const footer = document.querySelector('footer');
-  if (topbar && footer) {
-    topbar.classList.remove('hide');
-    footer.classList.remove('hide');
-    hideTimeout = setTimeout(() => {
-      topbar.classList.add('hide');
-      footer.classList.add('hide');
-    }, 2000);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   await fetchTileList();
   createLightbox();
