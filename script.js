@@ -267,10 +267,7 @@ gallery.addEventListener('pointerleave', () => {
   isDragging = false;
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
   await fetchTileList();
-  createLightbox();
-  animate();
 
   let lastTouchX = 0, lastTouchY = 0;
   let initialDistance = null;
@@ -323,4 +320,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     velocityX += e.deltaX * 0.1;
     velocityY += e.deltaY * 0.1;
   }, { passive: false });
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await fetchTileList();
+  createLightbox();
+  animate();
 });
