@@ -10,9 +10,8 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: Arial, sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  touch-action: pan-x pan-y;
+  min-height: 100vh;
+  padding: 1rem;
 }
 
 body.scrollable {
@@ -235,3 +234,16 @@ a:hover {
   line-height: 1.4rem;
 }
 
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.grid img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
